@@ -1,0 +1,8 @@
+Origin: CodeOriginal's Betas
+Label: CodeOriginal
+Suite: beta
+Version: 1.0
+Codename: CodeOriginal's Betas
+Architectures: iphoneos-arm
+Components: main
+Description: My inner-workings
