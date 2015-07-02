@@ -1,8 +1,17 @@
-Origin: CodeOriginal's
-Label: CodeOriginal
-Suite: beta
-Version: 1.0
-Codename: CodeOriginal's
+Origin: uroboro's repository
+Label: uroboro's repo
+Suite: stable
+Version: 0.1
+Codename: uroboronest
 Architectures: iphoneos-arm
 Components: main
-Description: My Outer-Workings
+Description: A rather circular repository
+MD5Sum:
+ 62fa5b728673b7be003a52ff2525a468 9901 Packages
+ 08e942cef97dbfdb8bf0b1a71c58533c 2008 Packages.bz2
+SHA1:
+ 86d3fd906603721d270814b9fa5a3659cf4c9ecc 9901 Packages
+ 48010ebde47448bea1d376273a37e666f956fada 2008 Packages.bz2
+SHA256:
+ b5eb9c4e1fce2a0f2055a318ad5df0f2645dcee5ca5c2d55f79e2a51ed0d3b56 9901 Packages
+ f6714ff3cbca19d8f368a0baaabcf12e5e1e0601f93f50d9be1c53e90380b157 2008 Packages.bz2
