@@ -1,136 +1,236 @@
-<!DOCTYPE HTML>
-<!--
-	Arcana by HTML5 UP
-	html5up.net | @n33co
-	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
--->
+<!DOCTYPE html>
 <html>
-	<head>
-		<title>CodeOriginal's Repo</title>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width, initial-scale=1" />
-		<!--[if lte IE 8]><script src="../assets/js/ie/html5shiv.js"></script><![endif]-->
-		<link rel="stylesheet" href="../assets/css/main.css" />
-		<!--[if lte IE 8]><link rel="stylesheet" href="../assets/css/ie8.css" /><![endif]-->
-		<!--[if lte IE 9]><link rel="stylesheet" href="../assets/css/ie9.css" /><![endif]-->
-	</head>
-	<body>
-		<div id="page-wrapper">
+<head>
+    <link href="../css/ios7.css" rel="stylesheet">
+    <meta content="width=device-width, user-scalable=no" name="viewport">
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+	<script type="text/javascript" src="../js/utils.js"></script>
+	<script type="text/javascript" src="../js/element.js"></script>
+	<script type="text/javascript" src="../js/microajax.js"></script>
+<script>
+if (navigator.userAgent.search(/Cydia/) != -1) {
+	document.body.classList.add("cydia");
+}
+</script>
+<style>
+body.cydia {
+	background: none !important;
+}
+</style>
+<script type="text/javascript">
+var noPackage = {
+	"name":"PACKAGE"
+	, "developer":"DEVELOPER"
+	, "twitter":"TWITTERHANDLE"
+	, "developerSite":"SITE"
+	, "description":[
+		  "DESCRIPTION"
+	]
+	, "changelog":[
+		"VERSION","INFORMATION"
+	]
+}
 
-			<!-- Header -->
-				<div id="header">
+var query = getQuery();
+var packageID = query["p"];
 
-					<!-- Logo -->
-						<h1><a href="../index.html" id="logo">Releases <em>by CodeOriginal</em></a></h1>
+function loaded() {
+	if (!packageID) { // Load package list
+		loadPkgListUI();
+		new microAjax("Packages", updatePkgListPage);
+	} else { // there's a package id in the url
+		if (query["screenshots"] == 1) {
+			loadScrnShtUI();
+		} else {
+			loadPkgUI();
+		}
+		var decodedFile = "depictions/"+packageID+"/description.txt";
+		getJSON({url:decodedFile,callback:updatePage,onfail:ff});
+	}
+	getJSON({url:"repo.txt",callback:updateRepoPage});
+}
 
-					<!-- Nav -->
-						<nav id="nav">
-							<ul>
-								<li><a href="../index.html">Home</a></li>
-								<li class="current">
-									<a href="../repo/index.html">Repo</a>
-									<ul>
-										<li><a href="../beta/index.html">Beta</a></li>
-									</ul>
-								</li>
-								<li>
-									<a href="#">Projects</a>
-									<ul>
-										<li><a href="http://github.com/codeoriginal/beginning">Beginning</a></li>
-										<li><a href="http://GitHub.com/codeoriginal/cydiarepolist">cydiaRepoList</a></li>
-										<li><a href="http://github.com/codeoriginal/codeoriginal.github.com">codeoriginal.github.com</a></a>
-									</ul>
-								</li>
-							</ul>
-						</nav>
+function ff(e){ // no package found, loading dummy
+console.log(e);
+	updatePage(noPackage);
+}
 
-				</div>
+function updatePkgListPage(res) {
+	var array = res.split("\n").sort();
+	var packages = [];
+	for (i in array) {
+		var obj = array[i];
+		if (obj.indexOf("Package: ") > -1) {
+			var pkgID = obj.replace("Package: ","");
+			if (packages.indexOf(pkgID) == -1 ) {
+				packages.push(pkgID);
+			}
+		}
+	}
 
-			<!-- Main -->
-				<section class="wrapper style1">
-					<div class="container">
-						<div id="content">
+	// Package list UI
+	// Title
+	var t = document.getElementById("packageListTitle");
+	if (t){
+		t.innerHTML = "Packages";//+pkgName;
+	}
+	// List
+	var list = document.getElementById("packageList");
+	if (list){
+		for (p in packages) {
+			var packageID = packages[p];
+			var li11 = elementFromDictionary({_type:"li"});
+			list.appendChild(li11);
+			var lnk = elementFromDictionary({_type:"a",id:packageID,href:"?p="+packages[p],innerHTML:{_type:"text",text:packages[p]}});
+			getJSON({url:"depictions/"+packageID+"/description.txt",callback:function(md){
+				document.getElementById(md["packageID"]).innerText = md["name"];
+			}});
+			li11.appendChild(lnk);
+		};
+		var packageID = "com.uroboro.test";
+		var li11 = elementFromDictionary({_type:"li"});
+		list.appendChild(li11);
+			var lnk = elementFromDictionary({_type:"a",id:packageID,href:"?p="+packageID,innerHTML:{_type:"text",text:packageID}});
+			getJSON({url:"depictions/"+packageID+"/description.txt",callback:function(md){
+				document.getElementById(md["packageID"]).innerText = md["name"];
+			}});
+		li11.appendChild(lnk);
+	}
+}
 
-							<!-- Content -->
+function updatePage(md) {
+//elementPrintDescription(md);
 
-								<article>
-									<header>
-										<h2>CodeOriginal's <em>Repo</em></h2>
-										<p>All stable, all the time.</p>
-									</header>
+	var devName = md["developer"];
 
-									<span class="image featured"><img src="../images/banner.jpg" alt="" /></span>
-									
-									<h2>Packages:</h2>
-									
-									<ol>
-										<li>
-										<strong>dpkg-scanpackages</strong> <em>depends:</em> org.coolstar.perl
-										</li>
-									</ol>
-									<h3>Yup, thats pretty much it.</h3>
-								</article>
+	var pkgName = md["name"];
+	window.document.title = pkgName+" by "+devName;
 
-						</div>
-					</div>
-				</section>
+	// Package UI
+	// Description
+	var desc = document.getElementById("description");
+	if (desc){
+		for (d in md["description"]) {
+			var div = document.createElement('p');
+			div.innerHTML = md["description"][d];
+			desc.appendChild(div);
+		};
+	}
+	// Screenshots link
+	var sh = document.getElementById("screenshots");
+	if (sh) {
+		if (md["screenshotCount"] > 0 ) {
+			sh.appendChild(elementFromDictionary({_type:"a",href:"?p="+packageID+"&screenshots=1",innerHTML:{_type:"text",text:"Screenshots"}}));
+		} else {
+			elementRemoveFromParent(sh);
+		}
+	}
+	// Changelog
+	var desc = document.getElementById("changelog");
+	if (desc){
+		var b = 1;
+		for (d in md["changelog"]) {
+			var div = document.createElement('p');
+			var B = b ? " :" : "";
+			div.innerHTML = md["changelog"][d] + B;
+			desc.appendChild(div);
+			b = !b;
+		};
+	}
+	// Developer info
+	// Twitter
+	var tw = document.getElementById("twitter");
+	if (tw) {
+		var twName = md["twitter"];
+		tw.appendChild(elementFromDictionary({_type:"a",href:"https://twitter.com/"+twName,innerHTML:{_type:"text",text:"@"+twName+" on Twitter"}}));
+		
+	}
+	// Site
+	var site = document.getElementById("developerSite");
+	if (site) {
+		site.appendChild(elementFromDictionary({_type:"a",href:md["developerSite"],innerHTML:{_type:"text",text:devName+"'s page"}}));
+	}
 
-			<!-- Footer -->
-				<div id="footer">
-					<div class="container">
-						<div class="row">
-							<section class="3u 6u(narrower) 12u$(mobilep)">
-								<h3>External Packages</h3>
-								<ul class="links">
-									<li><strong>org.coolstar.perl</strong>: <a href="http://coolstar.org/publicrepo">http://coolstar.org/publicrepo</a></li>
-								</ul>
-							</section>
-							<section class="6u 12u(narrower)">
-								<h3>Get In Touch</h3>
-								<form action="MAILTO:stefburgoyne@gmail.com" method="POST" enctype="text/plain">
-									<div class="row 50%">
-										<div class="6u 12u(mobilep)">
-											<input type="text" name="name" id="name" placeholder="Name" />
-										</div>
-										<div class="6u 12u(mobilep)">
-											<input type="email" name="email" id="email" placeholder="Email" />
-										</div>
-									</div>
-									<div class="row 50%">
-										<div class="12u">
-											<textarea name="message" id="message" placeholder="Message" rows="5"></textarea>
-										</div>
-									</div>
-									<div class="row 50%">
-										<div class="12u">
-											<ul class="actions">
-												<li><input type="submit" class="button alt" value="Send Message" /></li>
-											</ul>
-										</div>
-									</div>
-								</form>
-							</section>
-						</div>
-					</div>
+	// Screenshots UI
+	// Title
+	var sst = document.getElementById("screenshotListTitle");
+	if (sst){
+		sst.innerHTML = "Screenshots of "+pkgName;
+	}
+	// Screenshot list
+	var ssl = document.getElementById("screenshotList");
+	if (ssl){
+		for (var d = 0; d < md["screenshotCount"]; d++) {
+			var imgPath = "depictions/"+packageID+"/screenshots/"+d+".jpg";
+			var e1 = elementFromDictionary({_type:"p"});
+			var e2 = elementFromDictionary({_type:"a",href:imgPath});
+			var e3 = elementFromDictionary({_type:"img",src:imgPath});
+			e1.appendChild(e2).appendChild(e3);
+			ssl.appendChild(e1);
+		};
+	}
+}
 
-					<!-- Copyright -->
-						<div class="copyright">
-							<ul class="menu">
-								<li>&copy; CodeOriginal All rights reserved</li><li>Design: <a href="http://html5up.net">HTML5 UP</a></li>
-							</ul>
-						</div>
+function updateRepoPage(rd) {
+	var repo = document.getElementById("repo");
+	if (repo) {
+		repo.appendChild(elementFromDictionary({_type:"a",href:rd["url"],innerHTML:{_type:"text",text:rd["name"]}}));
+	}
+}
 
-				</div>
+function loadPkgUI() {
+	var h1 = elementFromDictionary({_type:"h2",innerHTML:{_type:"text",text:"Description"}});
+	document.body.appendChild(h1);
+	var ul1 = elementFromDictionary({_type:"ul"});
+	var li11 = elementFromDictionary({_type:"li",id:"description"});
+	var li12 = elementFromDictionary({_type:"li",id:"screenshots"});
+	ul1.appendChild(li11);
+	ul1.appendChild(li12);
+	document.body.appendChild(ul1);
 
-		</div>
+	var h2 = elementFromDictionary({_type:"h2",innerHTML:{_type:"text",text:"Changelog"}});
+	document.body.appendChild(h2);
+	var ul2 = elementFromDictionary({_type:"ul"});
+	var li21 = elementFromDictionary({_type:"li",id:"changelog"});
+	ul2.appendChild(li21);
+	document.body.appendChild(ul2);
 
-		<!-- Scripts -->
-			<script src="../assets/js/jquery.min.js"></script>
-			<script src="../assets/js/jquery.dropotron.min.js"></script>
-			<script src="../assets/js/skel.min.js"></script>
-			<script src="../assets/js/util.js"></script>
-			<!--[if lte IE 8]><script src="../assets/js/ie/respond.min.js"></script><![endif]-->
-			<script src="../assets/js/main.js"></script>
+	var h3 = elementFromDictionary({_type:"h2",innerHTML:{_type:"text",text:"Developer"}});
+	document.body.appendChild(h3);
+	var ul3 = elementFromDictionary({_type:"ul"});
+	var li31 = elementFromDictionary({_type:"li",id:"twitter"});
+	var li32 = elementFromDictionary({_type:"li",id:"developerSite"});
+	ul3.appendChild(li31);
+	ul3.appendChild(li32);
+	document.body.appendChild(ul3);
 
-	</body>
+	var p = elementFromDictionary({_type:"p",id:"repo"});
+	document.body.appendChild(p);
+}
+
+function loadScrnShtUI() {
+	var h1 = elementFromDictionary({_type:"h2",id:"screenshotListTitle",innerHTML:{_type:"text",text:"Screenshots of "}});
+	document.body.appendChild(h1);
+	var ul1 = elementFromDictionary({_type:"ul"});
+	var li11 = elementFromDictionary({_type:"li",id:"screenshotList"});
+	ul1.appendChild(li11);
+	document.body.appendChild(ul1);
+
+	var p = elementFromDictionary({_type:"p",id:"repo"});
+	document.body.appendChild(p);
+}
+
+function loadPkgListUI() {
+	var h1 = elementFromDictionary({_type:"h2",id:"packageListTitle",innerHTML:{_type:"text",text:"Packages"}});
+	document.body.appendChild(h1);
+	var ul1 = elementFromDictionary({_type:"ul",id:"packageList"});
+	document.body.appendChild(ul1);
+
+	var p = elementFromDictionary({_type:"p",id:"repo"});
+	document.body.appendChild(p);
+}
+</script>
+</head>
+<body onload="loaded()">
+</body>
 </html>
