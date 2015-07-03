@@ -1,17 +1,17 @@
 Origin: CodeOriginal's repository
-Label: All stable, All the time. 
+Label: CodeOriginals repo
 Suite: stable
 Version: 0.1
 Codename: codeoriginal
 Architectures: iphoneos-arm
 Components: main
-Description: This is where I would keep my tweeks. IF I HAD ANY!
+Description: All stable, All the time
 MD5Sum:
- 08403c85e2d63afd68e13103c49e487b 573 Packages
- 068d7f5756315a07f18299bf77103bb4 411 Packages.bz2
+ 10d960afcd0cc93ce470940540dcf325 713 Packages
+ 91ad9f34f0a831bc84c63279a4cc1984 517 Packages.bz2
 SHA1:
- ebb5e4c86081bb8c4dcc3f7ff2044467e179d370 573 Packages
- 3a6923976a0c7eb59866455464525056bd671ff6 411 Packages.bz2
+ e3bc05c19c857abcb8728368427bb7a31dcfdb0f 713 Packages
+ 195f76ba4e3d25b4968fdba28823ef6957fe2de6 517 Packages.bz2
 SHA256:
- 202a905ffd8f699f419e4d2d4b8753296019d90a98308a90a2b940cd9de58296 573 Packages
- d2a0b43b393a6d92afa8b023495cc3809a2bc7eedbadd5317439954cf390fb7b 411 Packages.bz2
+ 4d4d6d2be97e49496d7db8585e40ed89145c854d17e8acf2755c1ed158a88d5d 713 Packages
+ 41c95b77c0dd8d57e8d69b1c007e1a7703b58edfe5e1198a25e79a60789d8818 517 Packages.bz2
