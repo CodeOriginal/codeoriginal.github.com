@@ -1,17 +1,8 @@
 Origin: CodeOriginal's repository
-Label: CodeOriginals repo
+Label: All stable, All the time. 
 Suite: stable
 Version: 0.1
 Codename: codeoriginal
 Architectures: iphoneos-arm
 Components: main
-Description: All stable, All the time
-MD5Sum:
- 10d960afcd0cc93ce470940540dcf325 713 Packages
- 91ad9f34f0a831bc84c63279a4cc1984 517 Packages.bz2
-SHA1:
- e3bc05c19c857abcb8728368427bb7a31dcfdb0f 713 Packages
- 195f76ba4e3d25b4968fdba28823ef6957fe2de6 517 Packages.bz2
-SHA256:
- 4d4d6d2be97e49496d7db8585e40ed89145c854d17e8acf2755c1ed158a88d5d 713 Packages
- 41c95b77c0dd8d57e8d69b1c007e1a7703b58edfe5e1198a25e79a60789d8818 517 Packages.bz2
+Description: This is where I would keep my tweeks. IF I HAD ANY!

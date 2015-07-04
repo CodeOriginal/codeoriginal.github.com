@@ -1,4 +1,0 @@
-{
-	"name":"CodeOriginal's repo"
-	, "url":"http://codeoriginal.github.io/repo"
-}
